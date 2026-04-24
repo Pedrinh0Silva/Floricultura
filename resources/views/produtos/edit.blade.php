@@ -1,61 +1,65 @@
 <x-app-layout>
-    <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            {{ __('Editar Produto: ') }} {{ $produto->nome }}
-        </h2>
-    </x-slot>
+    <div class="max-w-4xl mx-auto py-8">
+        <div class="bg-white p-6 rounded-lg shadow-md">
+            <h2 class="text-2xl font-bold mb-6">Editar Produto: {{ $produto->nome }}</h2>
 
-    <div class="py-12">
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg p-6">
-                
-                <form action="{{ route('produtos.update', $produto->id) }}" method="POST">
-                    @csrf
-                    @method('PUT') <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700">Nome do Produto</label>
-                            <input type="text" name="nome" value="{{ $produto->nome }}" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500" required>
-                        </div>
-
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700">Categoria</label>
-                            <input type="text" name="categoria" value="{{ $produto->categoria }}" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500" required>
-                        </div>
-
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700">Quantidade em Estoque</label>
-                            <input type="number" name="quantidade" value="{{ $produto->quantidade }}" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 font-bold text-blue-600" required>
-                        </div>
-
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700">Estoque Mínimo (Alerta)</label>
-                            <input type="number" name="estoque_minimo" value="{{ $produto->estoque_minimo }}" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500" required>
-                        </div>
-
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700">Preço Unitário (R$)</label>
-                            <input type="number" step="0.01" name="preco" value="{{ $produto->preco }}" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500" required>
-                        </div>
-
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700">Fornecedor</label>
-                            <input type="text" name="fornecedor" value="{{ $produto->fornecedor }}" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500" required>
-                        </div>
+            <form action="{{ route('produtos.update', $produto->id) }}" method="POST">
+                @csrf
+                @method('PUT') <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block font-bold mb-1">Nome</label>
+                        <input type="text" name="nome" value="{{ $produto->nome }}" class="w-full border rounded p-2" required>
                     </div>
 
-                    <div class="mt-6">
-                        <label class="block text-sm font-medium text-gray-700">Descrição</label>
-                        <textarea name="descricao" rows="3" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500">{{ $produto->descricao }}</textarea>
+                    <div>
+                        <label class="block font-bold mb-1">Categoria</label>
+                        <select name="categoria_id" class="w-full border rounded p-2" required>
+                            @foreach($categorias as $categoria)
+                                <option value="{{ $categoria->id }}" {{ $produto->categoria_id == $categoria->id ? 'selected' : '' }}>
+                                    {{ $categoria->nome }}
+                                </option>
+                            @endforeach
+                        </select>
                     </div>
 
-                    <div class="mt-6 flex items-center justify-end">
-                        <a href="{{ route('produtos.index') }}" class="text-gray-600 hover:underline mr-4">Cancelar</a>
-                        <button type="submit" class="bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-6 rounded shadow transition duration-150">
-                            Atualizar Produto
-                        </button>
+                    <div>
+                        <label class="block font-bold mb-1">Marca / Fornecedor</label>
+                        <input type="text" name="marca_fornecedor" value="{{ $produto->marca_fornecedor }}" class="w-full border rounded p-2" required>
                     </div>
-                </form>
-            </div>
+
+                    <div>
+                        <label class="block font-bold mb-1">Modelo / Tipo</label>
+                        <input type="text" name="modelo_tipo" value="{{ $produto->modelo_tipo }}" class="w-full border rounded p-2" required>
+                    </div>
+
+                    <div>
+                        <label class="block font-bold mb-1">Quantidade Atual</label>
+                        <input type="number" name="quantidade_atual" value="{{ $produto->quantidade_atual }}" class="w-full border rounded p-2" required>
+                    </div>
+
+                    <div>
+                        <label class="block font-bold mb-1">Estoque Mínimo</label>
+                        <input type="number" name="estoque_minimo" value="{{ $produto->estoque_minimo }}" class="w-full border rounded p-2" required>
+                    </div>
+
+                    <div class="md:col-span-2">
+                        <label class="block font-bold mb-1">Descrição</label>
+                        <textarea name="descricao" rows="2" class="w-full border rounded p-2" required>{{ $produto->descricao }}</textarea>
+                    </div>
+
+                    <div class="md:col-span-2">
+                        <label class="block font-bold mb-1">Características Específicas</label>
+                        <textarea name="caracteristicas" rows="2" class="w-full border rounded p-2" required>{{ $produto->caracteristicas }}</textarea>
+                    </div>
+                </div>
+
+                <div class="mt-6 text-right">
+                    <a href="{{ route('produtos.index') }}" class="mr-4 text-gray-600 hover:underline">Voltar</a>
+                    <button type="submit" class="bg-blue-600 text-white font-bold py-2 px-6 rounded hover:bg-blue-700">
+                        Atualizar Cadastro
+                    </button>
+                </div>
+            </form>
         </div>
     </div>
 </x-app-layout>

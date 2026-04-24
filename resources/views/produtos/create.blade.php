@@ -1,72 +1,70 @@
-<x-app-layout>
-    <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            {{ __('Cadastrar Novo Produto') }}
-        </h2>
-    </x-slot>
+<x-app-layout> <div class="max-w-4xl mx-auto py-8">
+        <div class="bg-white p-6 rounded-lg shadow-md">
+            <h2 class="text-2xl font-bold mb-6">Cadastrar Novo Produto</h2>
 
-    <div class="py-12">
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg p-6">
-                
-                @if ($errors->any())
-                    <div class="mb-4 p-4 bg-red-100 border border-red-400 text-red-700 rounded">
-                        <ul>
-                            @foreach ($errors->all() as $error)
-                                <li>{{ $error }}</li>
+            @if ($errors->any())
+                <div class="bg-red-100 text-red-700 p-3 rounded mb-4">
+                    Preencha todos os campos corretamente.
+                </div>
+            @endif
+
+            <form action="{{ route('produtos.store') }}" method="POST">
+                @csrf
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block font-bold mb-1">Nome</label>
+                        <input type="text" name="nome" class="w-full border rounded p-2" required>
+                    </div>
+
+                    <div>
+                        <label class="block font-bold mb-1">Categoria</label>
+                        <select name="categoria_id" class="w-full border rounded p-2" required>
+                            <option value="">Selecione uma categoria...</option>
+                            @foreach($categorias as $categoria)
+                                <option value="{{ $categoria->id }}">{{ $categoria->nome }}</option>
                             @endforeach
-                        </ul>
-                    </div>
-                @endif
-
-                <form action="{{ route('produtos.store') }}" method="POST">
-                    @csrf
-
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        <div>
-                            <label for="nome" class="block text-sm font-medium text-gray-700">Nome do Produto</label>
-                            <input type="text" name="nome" id="nome" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500" required>
-                        </div>
-
-                        <div>
-                            <label for="categoria" class="block text-sm font-medium text-gray-700">Categoria</label>
-                            <input type="text" name="categoria" id="categoria" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500" required>
-                        </div>
-
-                        <div>
-                            <label for="quantidade" class="block text-sm font-medium text-gray-700">Quantidade Inicial</label>
-                            <input type="number" name="quantidade" id="quantidade" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500" required>
-                        </div>
-
-                        <div>
-                            <label for="estoque_minimo" class="block text-sm font-medium text-gray-700">Estoque Mínimo (Alerta)</label>
-                            <input type="number" name="estoque_minimo" id="estoque_minimo" value="5" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500" required>
-                        </div>
-
-                        <div>
-                            <label for="preco" class="block text-sm font-medium text-gray-700">Preço Unitário (R$)</label>
-                            <input type="number" step="0.01" name="preco" id="preco" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500" required>
-                        </div>
-
-                        <div>
-                            <label for="fornecedor" class="block text-sm font-medium text-gray-700">Fornecedor</label>
-                            <input type="text" name="fornecedor" id="fornecedor" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500" required>
-                        </div>
+                        </select>
                     </div>
 
-                    <div class="mt-6">
-                        <label for="descricao" class="block text-sm font-medium text-gray-700">Descrição</label>
-                        <textarea name="descricao" id="descricao" rows="3" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"></textarea>
+                    <div>
+                        <label class="block font-bold mb-1">Marca / Fornecedor</label>
+                        <input type="text" name="marca_fornecedor" class="w-full border rounded p-2" required>
                     </div>
 
-                    <div class="mt-6 flex items-center justify-end">
-                        <a href="{{ route('produtos.index') }}" class="text-gray-600 hover:underline mr-4">Cancelar</a>
-                        <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-6 rounded shadow transition duration-150">
-                            Salvar Produto
-                        </button>
+                    <div>
+                        <label class="block font-bold mb-1">Modelo / Tipo</label>
+                        <input type="text" name="modelo_tipo" class="w-full border rounded p-2" required>
                     </div>
-                </form>
-            </div>
+
+                    <div>
+                        <label class="block font-bold mb-1">Quantidade Atual</label>
+                        <input type="number" name="quantidade_atual" min="0" class="w-full border rounded p-2" required>
+                    </div>
+
+                    <div>
+                        <label class="block font-bold mb-1">Estoque Mínimo</label>
+                        <input type="number" name="estoque_minimo" min="0" class="w-full border rounded p-2" required>
+                    </div>
+
+                    <div class="md:col-span-2">
+                        <label class="block font-bold mb-1">Descrição</label>
+                        <textarea name="descricao" rows="2" class="w-full border rounded p-2" required></textarea>
+                    </div>
+
+                    <div class="md:col-span-2">
+                        <label class="block font-bold mb-1">Características Específicas</label>
+                        <textarea name="caracteristicas" rows="2" class="w-full border rounded p-2" required></textarea>
+                    </div>
+                </div>
+
+                <div class="mt-6">
+                    <button type="submit" class="bg-blue-600 text-white font-bold py-2 px-4 rounded hover:bg-blue-700">
+                        Salvar Produto
+                    </button>
+                    <a href="{{ route('produtos.index') }}" class="ml-4 text-gray-600 hover:underline">Cancelar</a>
+                </div>
+            </form>
         </div>
     </div>
 </x-app-layout>
